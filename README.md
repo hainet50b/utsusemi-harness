@@ -40,10 +40,9 @@ The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you throu
 | `PRD.md` | Product requirements (What / Why) + Tasks ledger |
 | `CONVENTIONS.md` | How code is written (test pattern, lint, commits) |
 | `AGENTS.md` | Ralph Loop philosophy + first-time setup hints |
+| `CLAUDE.md` | One-line `@AGENTS.md` import so Claude Code reads the same guidance |
 | `prompt.md` | Ralph's per-loop instructions |
 | `ralph.sh` / `ralph.ps1` | Ralph's loop driver (claude CLI + size-based report rotation) |
 | `.gitignore` | Standard ignores |
 
 The `reports/` directory and `reports/report.html` (Ralph's human-facing execution notes) are created on the first invocation of Ralph (`ralph.sh` or `ralph.ps1`). Rotated reports stay in `reports/` alongside the current one.
-
-`init.sh` and `init.ps1` also create a `CLAUDE.md` mirror of `AGENTS.md` so Claude Code picks up the same guidance. Re-copy `CLAUDE.md` from `AGENTS.md` whenever `AGENTS.md` changes.

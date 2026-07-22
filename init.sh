@@ -7,8 +7,7 @@
 # Behavior:
 #   1. Copies _project/ to the destination path.
 #   2. Makes ralph.sh executable.
-#   3. Copies AGENTS.md to CLAUDE.md so Claude Code finds the same guidance.
-#   4. Runs `git init -b main`.
+#   3. Runs `git init -b main`.
 #
 # The template files leave {{PROJECT_NAME}} placeholders literal. The
 # conversational LLM driving setup is expected to replace them as part of
@@ -44,13 +43,6 @@ mkdir -p "$DEST"
 cp -r "$SOURCE"/. "$DEST"/
 
 chmod +x "$DEST/ralph.sh"
-
-# Mirror AGENTS.md to CLAUDE.md so Claude Code finds the same guidance.
-# Always a plain copy (not a symlink) because this project may be developed
-# on Linux and Windows simultaneously, and symlinks committed by a Linux
-# user become broken text files when a Windows user clones the repo.
-# Re-copy CLAUDE.md from AGENTS.md whenever AGENTS.md changes.
-cp "$DEST/AGENTS.md" "$DEST/CLAUDE.md"
 
 (
   cd "$DEST"

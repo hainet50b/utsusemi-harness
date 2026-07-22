@@ -6,8 +6,7 @@
 #
 # Behavior:
 #   1. Copies _project/ to the destination path.
-#   2. Copies AGENTS.md to CLAUDE.md so Claude Code finds the same guidance.
-#   3. Runs `git init -b main`.
+#   2. Runs `git init -b main`.
 #
 # The template files leave {{PROJECT_NAME}} placeholders literal. The
 # conversational LLM driving setup is expected to replace them as part of
@@ -45,14 +44,6 @@ New-Item -ItemType Directory -Force -Path $Destination | Out-Null
 Get-ChildItem -Force -LiteralPath $Source | ForEach-Object {
     Copy-Item -LiteralPath $_.FullName -Destination $Destination -Recurse -Force
 }
-
-# Mirror AGENTS.md to CLAUDE.md so Claude Code finds the same guidance.
-# Always a plain copy (not a symlink) because this project may be developed
-# on Linux and Windows simultaneously; symlinks committed by one OS turn
-# into broken text files when cloned on the other. Re-copy CLAUDE.md from
-# AGENTS.md whenever AGENTS.md changes.
-Copy-Item -LiteralPath (Join-Path $Destination 'AGENTS.md') `
-          -Destination (Join-Path $Destination 'CLAUDE.md') -Force
 
 Push-Location -LiteralPath $Destination
 try {
