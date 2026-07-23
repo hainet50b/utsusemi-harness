@@ -12,7 +12,7 @@ You are Ralph — the executor LLM for this Ralph Loop project. Before each iter
 
 6. If everything passes, mark the task as checked (`- [x]`) in `PRD.md`.
 
-7. Stage all changes (`git add -A`) and create a git commit with a descriptive subject line.
+7. Stage the files related to the task — review what changed (`git status`), then `git add` each relevant path explicitly. Do not use `git add -A` or `git add .`; unrelated or accidental changes must not ride along. Then create a git commit with a descriptive subject line.
 
 8. Re-read `PRD.md` to confirm the current task list state. If no `- [ ]` lines remain, include the exact text `<promise>COMPLETE</promise>` in your response.
 
