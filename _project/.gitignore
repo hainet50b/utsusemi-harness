@@ -2,6 +2,3 @@
 .DS_Store
 *.swp
 *.swo
-
-# Note: reports/ is intentionally NOT ignored. Ralph's HTML reports
-# (including rotated archives) are kept as Git history.

@@ -2,7 +2,7 @@
 
 A bootstrap for projects driven by the [Ralph Loop](https://ghuntley.com/ralph/) methodology — a workflow that separates _spec_ (kept by the human and a conversational LLM) from _implementation_ (carried out by Ralph, an executor LLM running in a loop against a PRD).
 
-This starter is intentionally minimal. The artifacts it produces are markdown files, a single shell script, and an HTML report. There is no binary to install, no service to run, no abstraction to learn beyond reading the files it places.
+This starter is intentionally minimal. The artifacts it produces are markdown files and a single shell script. There is no binary to install, no service to run, no abstraction to learn beyond reading the files it places.
 
 > [!NOTE]
 > The thinking behind this starter — externalized memory, documenting the "how," and treating the harness as plain text rather than a tool — is in [Living with a Harness — Notes from Ralph Loop](https://programacho.com/blog/living-with-a-harness/).
@@ -42,7 +42,5 @@ The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you throu
 | `AGENTS.md` | Ralph Loop philosophy + first-time setup hints |
 | `CLAUDE.md` | One-line `@AGENTS.md` import so Claude Code reads the same guidance |
 | `prompt.md` | Ralph's per-loop instructions |
-| `ralph.sh` / `ralph.ps1` | Ralph's loop driver (claude CLI + size-based report rotation) |
+| `ralph.sh` / `ralph.ps1` | Ralph's loop driver (claude CLI) |
 | `.gitignore` | Standard ignores |
-
-The `reports/` directory and `reports/report.html` (Ralph's human-facing execution notes) are created on the first invocation of Ralph (`ralph.sh` or `ralph.ps1`). Rotated reports stay in `reports/` alongside the current one.

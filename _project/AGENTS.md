@@ -6,7 +6,6 @@ This project uses the **Ralph Loop** methodology — a development style that se
 - `SPEC/` — developer-facing internal spec. The directory always contains `SPEC/SPEC.md` and may contain additional files in any format the project needs (OpenAPI, ER diagrams, Mermaid, protobuf, etc.); read whatever is in there
 - `PRD.md` — What / Why + open Tasks
 - `CONVENTIONS.md` — how code is written here
-- `reports/report.html` — Ralph's most recent execution notes (if present)
 - `prompt.md` / `ralph.sh` / `ralph.ps1` — Ralph's driver
 
 ## Principles
