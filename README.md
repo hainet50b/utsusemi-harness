@@ -1,6 +1,6 @@
 # ralph-loop-starter
 
-A bootstrap for projects driven by the [Ralph Loop](https://ghuntley.com/ralph/) methodology — a workflow that separates _spec_ (kept by the human and a conversational LLM) from _implementation_ (carried out by Ralph, an executor LLM running in a loop against a PRD).
+A bootstrap for projects driven by the [Ralph Loop](https://ghuntley.com/ralph/) methodology — a workflow that separates _spec_ (kept by the human and a conversational LLM) from _implementation_ (carried out by Ralph, an executor LLM running in a loop against a PRD). The separation is about ownership, not precedence: spec files are reference snapshots of understanding, and the codebase is the ground truth — only the PRD's intent and tasks bind the implementation.
 
 This starter is intentionally minimal. The artifacts it produces are markdown files and a single shell script. There is no binary to install, no service to run, no abstraction to learn beyond reading the files it places.
 
@@ -35,8 +35,8 @@ The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you throu
 
 | File | Role |
 | --- | --- |
-| `README.md` | User-facing spec |
-| `SPEC/` | Developer-facing internal spec. Starts with a nearly-empty `SPEC/SPEC.md`; add additional spec files (OpenAPI, ER diagrams, etc.) alongside as the project grows |
+| `README.md` | User-facing reference (snapshot, not a contract) |
+| `SPEC/` | Developer-facing internal reference (snapshot, not a contract). Starts with a nearly-empty `SPEC/SPEC.md`; add additional spec files (OpenAPI, ER diagrams, etc.) alongside as the project grows |
 | `PRD.md` | Product requirements (What / Why) + Tasks ledger |
 | `CONVENTIONS.md` | How code is written (test pattern, lint, commits) |
 | `AGENTS.md` | Ralph Loop philosophy + first-time setup hints |
