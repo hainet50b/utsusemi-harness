@@ -1,67 +1,40 @@
 #!/usr/bin/env bash
-# ralph.sh — Ralph Loop driver.
+# ralph.sh — Ralph one-shot runner.
 #
 # Usage:
-#   ./ralph.sh [<max-iterations>]
-#
-# Defaults:
-#   max-iterations: 10
+#   ./ralph.sh [guidance...]
 #
 # Behavior:
-#   - On each iteration: invoke `claude` with prompt.md as the prompt.
-#   - claude failure exits immediately (no retry); transient failures are
-#     rare and retrying wastes time / tokens.
-#   - Detects `<promise>COMPLETE</promise>` in claude's output and exits 0
-#     when seen.
-#   - Reaching max-iterations without completion exits 1.
+#   - Invokes the agent CLI once with prompt.md as the prompt; Ralph lands
+#     one working set of PRD tasks and exits. There is no loop.
+#   - Arguments (optional) are appended as a "Guidance from the invoker"
+#     section, steering which tasks Ralph selects.
 #
-# Dependencies:
-#   - claude (Anthropic CLI)
-#   - jq
+# Environment:
+#   RALPH_CMD — agent command that reads the prompt on stdin; split on
+#               whitespace. Default: claude --dangerously-skip-permissions -p
 
 set -euo pipefail
 
-MAX_ITERATIONS=${1:-10}
 PROMPT_FILE="prompt.md"
-SLEEP_SECONDS=2
+RALPH_CMD=${RALPH_CMD:-"claude --dangerously-skip-permissions -p"}
 
 if [[ ! -f "$PROMPT_FILE" ]]; then
   echo "error: $PROMPT_FILE not found in $(pwd)." >&2
   exit 1
 fi
 
-command -v claude >/dev/null 2>&1 || { echo "error: 'claude' CLI not found on PATH." >&2; exit 1; }
-command -v jq     >/dev/null 2>&1 || { echo "error: 'jq' not found on PATH."     >&2; exit 1; }
+read -r -a cmd <<< "$RALPH_CMD"
+command -v "${cmd[0]}" >/dev/null 2>&1 || { echo "error: '${cmd[0]}' not found on PATH." >&2; exit 1; }
 
-echo "=== Ralph Loop ==="
-echo "Max iterations: $MAX_ITERATIONS"
+prompt=$(cat "$PROMPT_FILE")
+
+if (( $# > 0 )); then
+  prompt+=$'\n\n## Guidance from the invoker\n\n'"$*"
+  echo "=== Ralph run (guided) ==="
+else
+  echo "=== Ralph run ==="
+fi
 echo ""
 
-for ((i = 1; i <= MAX_ITERATIONS; i++)); do
-  echo "--- Iteration $i / $MAX_ITERATIONS ---"
-
-  if ! json=$(claude --dangerously-skip-permissions -p "$(cat "$PROMPT_FILE")" --output-format json 2>&1); then
-    echo "error: claude invocation failed; exiting." >&2
-    echo "$json" >&2
-    exit 1
-  fi
-
-  result=$(echo "$json" | jq -r '.result // empty')
-  duration_ms=$(echo "$json" | jq -r '.duration_ms // 0')
-  duration_s=$(( duration_ms / 1000 ))
-
-  echo "$result"
-  echo ""
-  echo "--- Iteration $i completed in ${duration_s}s ---"
-  echo ""
-
-  if [[ "$result" == *"<promise>COMPLETE</promise>"* ]]; then
-    echo "=== All tasks complete ==="
-    exit 0
-  fi
-
-  sleep "$SLEEP_SECONDS"
-done
-
-echo "=== Reached max iterations ($MAX_ITERATIONS) without completion ==="
-exit 1
+printf '%s\n' "$prompt" | "${cmd[@]}"

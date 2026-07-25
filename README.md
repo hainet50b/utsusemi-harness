@@ -1,6 +1,6 @@
 # ralph-loop-starter
 
-A bootstrap for projects driven by the [Ralph Loop](https://ghuntley.com/ralph/) methodology — a workflow that separates _spec_ (kept by the human and a conversational LLM) from _implementation_ (carried out by Ralph, an executor LLM running in a loop against a PRD). The separation is about ownership, not precedence: spec files are reference snapshots of understanding, and the codebase is the ground truth — only the PRD's intent and tasks bind the implementation.
+A bootstrap for projects driven by the [Ralph Loop](https://ghuntley.com/ralph/) methodology — a workflow that separates _spec_ (kept by the human and a conversational LLM) from _implementation_ (carried out by Ralph, an executor LLM invoked run-by-run against a PRD). The separation is about ownership, not precedence: spec files are reference snapshots of understanding, and the codebase is the ground truth — only the PRD's intent and tasks bind the implementation.
 
 This starter is intentionally minimal. The artifacts it produces are markdown files and a single shell script. There is no binary to install, no service to run, no abstraction to learn beyond reading the files it places.
 
@@ -27,7 +27,7 @@ A useful first prompt is something like:
 
 > _I just initialized a Ralph Loop project here. I want to build [a short description of what you have in mind]. Walk me through first-time setup._
 
-The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you through replacing `{{PROJECT_NAME}}` placeholders and filling in the spec documents based on what you want to build. You start `./ralph.sh` (or `.\ralph.ps1`) yourself when the specs are in shape.
+The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you through replacing `{{PROJECT_NAME}}` placeholders and filling in the spec documents based on what you want to build. When the specs are in shape, ask the agent to run Ralph — it kicks `./ralph.sh` (or `.\ralph.ps1`) while the spec conversation continues — or run the script yourself.
 
 ## What gets created
 
@@ -41,6 +41,17 @@ The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you throu
 | `CONVENTIONS.md` | How code is written (test pattern, lint, commits) |
 | `AGENTS.md` | Ralph Loop philosophy + first-time setup hints |
 | `CLAUDE.md` | One-line `@AGENTS.md` import so Claude Code reads the same guidance |
-| `prompt.md` | Ralph's per-loop instructions |
-| `ralph.sh` / `ralph.ps1` | Ralph's loop driver (claude CLI) |
+| `prompt.md` | Ralph's per-run instructions (the run contract) |
+| `ralph.sh` / `ralph.ps1` | Ralph's one-shot runner; agent CLI is overridable via `RALPH_CMD` |
 | `.gitignore` | Standard ignores |
+
+## Departures from the original Ralph
+
+Ralph, as [Geoffrey Huntley described it](https://ghuntley.com/ralph/), is a bash loop — `while :; do cat PROMPT.md | claude-code ; done` — with one hard rule: one item per loop. The loop itself never checks for completion; it spins until Ralph runs out of things to do in its plan file. Both the tight granularity and the relentless repetition were devices for an era of scarce context.
+
+This starter departs from that form in two ways:
+
+- **The `while` is gone from the shell.** `ralph.sh` runs Ralph **once**: a fresh context wakes up, selects a working set of open tasks (or follows guidance passed as arguments), lands it commit by commit, reports, and exits. Whether and when the next run happens is decided in the spec conversation, not by a counter.
+- **One working set per run, not one item.** The one-item rule was budgeting for scarce context; with that scarcity receded, Ralph is trusted to pick a coherent group of related tasks per run — a divergence made for the same reason the rule existed: spend the context window where it pays.
+
+What survives is what made Ralph work in the first place: an executor that begins every run with amnesia and trusts the files — PRD, spec, conventions, git history — as its only memory. That, not the shell loop, was always the heart of the technique.

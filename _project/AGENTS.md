@@ -6,14 +6,24 @@ This project uses the **Ralph Loop** methodology — a development style that se
 - `SPEC/` — developer-facing internal reference (snapshot, not a contract). The directory always contains `SPEC/SPEC.md` and may contain additional files in any format the project needs (OpenAPI, ER diagrams, Mermaid, protobuf, etc.); read whatever is in there
 - `PRD.md` — What / Why + open Tasks
 - `CONVENTIONS.md` — how code is written here
-- `prompt.md` / `ralph.sh` / `ralph.ps1` — Ralph's driver
+- `prompt.md` / `ralph.sh` / `ralph.ps1` — Ralph's run contract and one-shot runner
 
 ## Principles
 
-- **Spec and implementation are separate concerns.** Spec belongs to the human and the conversational LLM. Implementation belongs to Ralph. Do not blur the two.
+- **Spec and implementation are separate concerns.** Spec belongs to the human and the conversational LLM. Implementation belongs to Ralph. Do not blur the two — in conversation, never implement PRD tasks yourself; delegate them (see **Running Ralph** below).
 - **Completed PRD tasks are history.** Items marked `[x]` in `PRD.md` are immutable. Corrections to past work are expressed as new tasks, not edits to existing ones.
-- **Spec is a reference, not a contract.** Spec files (`README.md`, `SPEC/`) record the understanding at the time they were written; the codebase and current tooling are the ground truth. When the implementation context offers a clearly better option than the spec describes, take the better option — and surface the divergence so the spec can catch up. Never conform to a stale spec just because it is written down. The exceptions: `PRD.md`'s What / Why and open Tasks are the project's binding intent; `CONVENTIONS.md`'s lint / format / test commands remain the loop's pass gate; and files under `SPEC/contracts/` are interface contracts — promises to parties outside this repo — that bind the interfaces they describe (implementation internals stay free). A desired deviation from a contract is escalated as a new PRD task, never taken autonomously.
+- **Spec is a reference, not a contract.** Spec files (`README.md`, `SPEC/`) record the understanding at the time they were written; the codebase and current tooling are the ground truth. When the implementation context offers a clearly better option than the spec describes, take the better option — and surface the divergence so the spec can catch up. Never conform to a stale spec just because it is written down. The exceptions: `PRD.md`'s What / Why and open Tasks are the project's binding intent; `CONVENTIONS.md`'s lint / format / test commands remain each run's pass gate; and files under `SPEC/contracts/` are interface contracts — promises to parties outside this repo — that bind the interfaces they describe (implementation internals stay free). A desired deviation from a contract is escalated as a new PRD task, never taken autonomously.
 - **Act naturally, not formulaically.** You know this project follows Ralph Loop. Internalize the conventions but don't announce them in conversation — phrases like "As per Ralph Loop, I'll…" make the user feel like a spectator.
+
+## Running Ralph
+
+When the human asks for implementation (or says to "run Ralph"), kick the runner instead of writing the code yourself:
+
+- Run `./ralph.sh` (or `.\ralph.ps1` on Windows) — in the background if your harness supports it, so the spec conversation can continue in parallel.
+- One run = one working set: Ralph selects a coherent group of open `PRD.md` tasks, lands them commit by commit, reports, and exits.
+- Ralph picks the working set itself; to steer it, pass guidance as arguments: `./ralph.sh "focus on the parser tasks"`. Guidance selects among open tasks, never adds scope.
+- While a run is in flight, do not edit `PRD.md` — Ralph is checking tasks off in it. Hold new tasks until the run completes.
+- Relay the substance of Ralph's report to the human and decide together whether to kick the next run.
 
 ## First-time setup
 
