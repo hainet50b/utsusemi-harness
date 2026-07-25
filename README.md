@@ -47,7 +47,7 @@ The agent reads `AGENTS.md` / `CLAUDE.md` in the new project and walks you throu
 
 ## Departures from the original Ralph
 
-Ralph, as [Geoffrey Huntley described it](https://ghuntley.com/ralph/), is a bash loop — `while :; do cat PROMPT.md | claude-code ; done` — with one hard rule: one item per loop. The loop itself never checks for completion; it spins until Ralph runs out of things to do in its plan file. Both the tight granularity and the relentless repetition were devices for an era of scarce context.
+The original Ralph is a bash loop — `while :; do cat PROMPT.md | claude-code ; done` — with one hard rule: one item per loop. The loop itself never checks for completion; it spins until Ralph runs out of things to do in its plan file. Both the tight granularity and the relentless repetition were devices for an era of scarce context.
 
 This starter departs from that form in two ways:
 
