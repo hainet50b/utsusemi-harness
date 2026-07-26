@@ -31,4 +31,3 @@ Before working, read `PRD.md`, `README.md`, the files under `SPEC/`, and `CONVEN
 IMPORTANT:
 - If the codebase or current tooling suggests a clearly better approach than what `SPEC/` or `README.md` describe, prefer the better approach. Record the divergence as a `Spec-Drift:` trailer in the commit body so the spec layer can be updated. Exception: files under `SPEC/contracts/` bind the interfaces they describe — conform to them, and if a contract itself looks wrong or stale, stop and report instead of diverging.
 - One working set per run, then stop. Whether another run happens is the invoker's decision, not yours.
-- Do not skip failing checks. Fix the code until they pass before marking a task complete.

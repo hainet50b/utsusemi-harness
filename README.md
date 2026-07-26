@@ -2,7 +2,7 @@
 
 A bootstrap for projects driven by the [Ralph Loop](https://ghuntley.com/ralph/) methodology — a workflow that separates _spec_ (kept by the human and a conversational LLM) from _implementation_ (carried out by Ralph, an executor LLM invoked run-by-run against a PRD). The separation is about ownership, not precedence: spec files are reference snapshots of understanding, and the codebase is the ground truth — only the PRD's intent and tasks bind the implementation.
 
-This starter is intentionally minimal. The artifacts it produces are markdown files and a single shell script. There is no binary to install, no service to run, no abstraction to learn beyond reading the files it places.
+This starter is intentionally minimal. The artifacts it produces are markdown files and a pair of runner scripts. There is no binary to install, no service to run, no abstraction to learn beyond reading the files it places.
 
 > [!NOTE]
 > The thinking behind this starter — externalized memory, documenting the "how," and treating the harness as plain text rather than a tool — is in [Living with a Harness — Notes from Ralph Loop](https://programacho.com/blog/living-with-a-harness/).
